@@ -163,7 +163,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             $result = '';
 
                             for ($i = 0; $i < $Height; $i++) {
-                                for ($j = 0; $j < $Height; $j++) {
+                                for ($j = 0; $j < $Height - 1; $j++) {
                                     $result .= " ";
                                 }
                                 for ($k = 0; $k < $i + 1; $k++) {
@@ -175,7 +175,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             $Height = 0;
                             for ($i = $pieces[1]; $i > 0; $i--)  
                             {  
-                                for ($j = 0; $j < $Height; $j++) {
+                                for ($j = 0; $j < $Height - 1; $j++) {
                                     $result .= " ";
                                 } 
                           
