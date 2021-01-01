@@ -210,7 +210,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                                     else {
                                         $coef = $coef * ($i - $j + 1) / $j;
                                     }
-                                    $result .= $coef;
+                                    $result .= $coef . '  ';
                                 }
                                 $result .= "\n";
                             }
