@@ -102,7 +102,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                                 "   * Wajik <tinggi>\n" .
                                 "   * Segitiga Pascal <tinggi>\n" .
                                 "   * Segitiga Floyd <tinggi>\n" .
-                            "Untuk menyimpan berkas, kirim berkas tersebut ke bot init.\n"
+                            "Untuk menyimpan berkas, kirim berkas tersebut ke bot ini.\n"
                         );
                         $textMessageBuilder1 = new TextMessageBuilder(
                             "Id stiker bisa dilihat di:\n" .
@@ -191,7 +191,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             $textMessageBuilder = new TextMessageBuilder($result);
                             $multiMessageBuilder->add($textMessageBuilder);
                         } 
-                    } else if (substr(strtolower($event['message']['text']), 0, 15) === 'Segitiga Pascal') {
+                    } else if (substr(strtolower($event['message']['text']), 0, 15) === 'segitiga pascal') {
                         $pieces = explode(" ", $event['message']['text']);
 
                         if (sizeof($pieces) == 3 && is_numeric($pieces[2])) {
@@ -216,7 +216,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             $textMessageBuilder = new TextMessageBuilder($result);
                             $multiMessageBuilder->add($textMessageBuilder);
                         } 
-                    } else if (substr(strtolower($event['message']['text']), 0, 15) === 'Segitiga Floyd') {
+                    } else if (substr(strtolower($event['message']['text']), 0, 15) === 'segitiga floyd') {
                         $pieces = explode(" ", $event['message']['text']);
 
                         if (sizeof($pieces) == 3 && is_numeric($pieces[2])) {
@@ -237,7 +237,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                     } else {
                         $textMessageBuilder = new TextMessageBuilder(
                             "Penulisan perintah salah.\n" .
-                                "Kirim 'Help' untuk informasi perintah.\n"
+                            "Kirim \"Help\" untuk informasi perintah.\n"
                         );
                         $multiMessageBuilder->add($textMessageBuilder);
                     }
