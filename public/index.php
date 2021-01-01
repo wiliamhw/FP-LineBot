@@ -110,16 +110,16 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             $textMessageBuilder = new TextMessageBuilder(substr(strtolower($event['message']['text']), 0, 6));
                             $multiMessageBuilder->add($textMessageBuilder);
 
-                            try {
-                                $stickerMessageBuilder = new StickerMessageBuilder($packageId, $stickerId);
-                                $multiMessageBuilder->add($stickerMessageBuilder);
-                            }
-                            catch (Exception $e) {
-                                $textMessageBuilder = new TextMessageBuilder(
-                                    "PackageID atau stickerID tidak terdefinisi."
-                                );
-                                $multiMessageBuilder->add($textMessageBuilder);
-                            }
+                            // try {
+                            //     $stickerMessageBuilder = new StickerMessageBuilder($packageId, $stickerId);
+                            //     $multiMessageBuilder->add($stickerMessageBuilder);
+                            // }
+                            // catch (Exception $e) {
+                            //     $textMessageBuilder = new TextMessageBuilder(
+                            //         "PackageID atau stickerID tidak terdefinisi."
+                            //     );
+                            //     $multiMessageBuilder->add($textMessageBuilder);
+                            // }
                         }
                     } else if (substr(strtolower($event['message']['text']), 0, 7) == 'piramid') {
                         // send sticker
