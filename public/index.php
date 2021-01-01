@@ -181,7 +181,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                           
                                 // Print i stars  
                                 for ($j = 0; $j < $i; $j++) {
-                                    $result .= "*";
+                                    $result .= "#";
                                 }
                                 $result .= "\n";
                                 $Height++;
