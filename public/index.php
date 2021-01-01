@@ -90,9 +90,9 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                         // send text
                         $textMessageBuilder = new TextMessageBuilder(
                             "List perintah:\n" .
-                                " * Help\n" .
-                                " * stiker <package_id> <sticler_id>\n" .
-                                " * piramid <height>\n"
+                                "   * Help\n" .
+                                "   * stiker <package_id> <sticler_id>\n" .
+                                "   * piramid <height>\n"
                         );
                         $textMessageBuilder1 = new TextMessageBuilder(
                             "Id stiker bisa dilihat di:\n" .
@@ -103,6 +103,9 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                     } else if (substr(strtolower($event['message']['text']), 0, 6) === 'stiker') {
                         // send sticker
                         $pieces = explode(" ", $event['message']['text']);
+                        $textMessageBuilder = new TextMessageBuilder(sizeof($pieces) . ' ' . $pieces[1]);
+                        $multiMessageBuilder->add($textMessageBuilder);
+
                         if (sizeof($pieces) === 3 && is_int($pieces[1]) && is_int($pieces[2])) {
                             $packageId = $pieces[1];
                             $stickerId = $pieces[2];
