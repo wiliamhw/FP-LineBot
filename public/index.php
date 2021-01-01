@@ -86,23 +86,34 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                     // make multiMessage
                     $multiMessageBuilder = new multiMessageBuilder();
 
-                    if (strtolower($event['message']['text']) == 'help') {
+                    if (strtolower($event['message']['text']) == 'perkenalan') {
+                        $textMessageBuilder = new TextMessageBuilder(
+                            "Bot ini dibuat untuk memenuhi final project pelatihan Line Bot.\n" .
+                            "Bot ini berfungsi untuk menapilkan stiker, menyimpan berkas, dan membuat pola bangunan yang dapat di copy-paste.\n"
+                        );
+                        $multiMessageBuilder->add($textMessageBuilder);
+                    }
+
+                    if (strtolower($event['message']['text']) == 'help' || strtolower($event['message']['text']) == 'perkenalan') {
                         // send text
                         $textMessageBuilder = new TextMessageBuilder(
                             "List perintah:\n" .
+                                "   * Perkenalan\n" .
                                 "   * Help\n" .
                                 "   * stiker <package_id> <sticler_id>\n" .
-                                "   * piramid <height>\n"
+                                "   * piramid <tinggi>\n" .
+                                "   * berlian <tinggi>\n"
                         );
                         $textMessageBuilder1 = new TextMessageBuilder(
                             "Id stiker bisa dilihat di:\n" .
-                            "https://devdocs.line.me/files/sticker_list.pdf"
+                                "https://devdocs.line.me/files/sticker_list.pdf"
                         );
                         $multiMessageBuilder->add($textMessageBuilder);
                         $multiMessageBuilder->add($textMessageBuilder1);
                     } else if (substr(strtolower($event['message']['text']), 0, 6) === 'stiker') {
                         // send sticker
                         $pieces = explode(" ", $event['message']['text']);
+
                         if (sizeof($pieces) == 3 && is_numeric($pieces[1]) && is_numeric($pieces[2])) {
                             $packageId = $pieces[1];
                             $stickerId = $pieces[2];
@@ -110,8 +121,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             if ($packageId < 640 && $stickerId < 5) {
                                 $stickerMessageBuilder = new StickerMessageBuilder($packageId, $stickerId);
                                 $multiMessageBuilder->add($stickerMessageBuilder);
-                            }
-                            else {
+                            } else {
                                 $textMessageBuilder = new TextMessageBuilder(
                                     "PackageID atau stickerID tidak terdefinisi."
                                 );
@@ -119,35 +129,66 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             }
                         }
                     } else if (substr(strtolower($event['message']['text']), 0, 7) === 'piramid') {
-                        // send sticker
                         $pieces = explode(" ", $event['message']['text']);
+
                         if (sizeof($pieces) == 2 && is_numeric($pieces[1])) {
                             $Height = $pieces[1];
                             $result = '';
 
                             for ($i = 0; $i < $Height; $i++) {
                                 // Bagian kiri
-                                for ($j = 0; $j < $Height - $i - 1; $j++)
-                                {
+                                for ($j = 0; $j < $Height - $i - 1; $j++) {
                                     $result .= "  ";
                                 }
-                                for ($k = 0; $k < $i + 1; $k++)
-                                {
+                                for ($k = 0; $k < $i + 1; $k++) {
                                     $result .= "#";
                                 }
                                 // Spasi tengah
                                 $result .= "  ";
                                 // Bagian kanan
-                                for ($k = 0; $k < $i + 1; $k++)
-                                {
+                                for ($k = 0; $k < $i + 1; $k++) {
                                     $result .= "#";
-                                }         
+                                }
                                 $result .= "\n";
                             }
-                            echo ($result);
                             $textMessageBuilder = new TextMessageBuilder($result);
                             $multiMessageBuilder->add($textMessageBuilder);
                         }
+                    } else if (substr(strtolower($event['message']['text']), 0, 7) === 'berlian') {
+                        $pieces = explode(" ", $event['message']['text']);
+
+                        if (sizeof($pieces) == 2 && is_numeric($pieces[1])) {
+                            $Height = $pieces[1] - 1;
+                            $result = '';
+
+                            for ($i = 0; $i < $Height; $i++) {
+                                for ($j = 0; $j < $Height; $j++) {
+                                    $result .= "  ";
+                                }
+                                for ($k = 0; $k < $i + 1; $k++) {
+                                    $result .= "*";
+                                }
+                                $result .= "\n";
+                                $Height--;
+                            }
+                            $Height = 0;
+                            for ($i = $pieces[1]; $i > 0; $i--)  
+                            {  
+                                for ($j = 0; $j < $Height; $j++) {
+                                    $result .= "  ";
+                                } 
+                          
+                                // Print i stars  
+                                for ($j = 0; $j < $i; $j++) {
+                                    $result .= "*";
+                                }
+                                $result .= "\n";
+                                $Height++;
+                            }  
+
+                            $textMessageBuilder = new TextMessageBuilder($result);
+                            $multiMessageBuilder->add($textMessageBuilder);
+                        } 
                     } else {
                         $textMessageBuilder = new TextMessageBuilder(
                             "Penulisan perintah salah.\n" .
