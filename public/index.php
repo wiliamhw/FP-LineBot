@@ -100,13 +100,13 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                         );
                         $multiMessageBuilder->add($textMessageBuilder);
                         $multiMessageBuilder->add($textMessageBuilder1);
-                    } else if (substr(strtolower($event['message']['text']), 0, 6) === 'stiker') {
+                    } else if (substr(strtolower($event['message']['text']), 0, 6) == 'stiker') {
                         // send sticker
                         $pieces = explode(" ", $event['message']['text']);
-                        $textMessageBuilder = new TextMessageBuilder(sizeof($pieces) . ' ' . $pieces[1]);
+                        $textMessageBuilder = new TextMessageBuilder(is_int($pieces[1]));
                         $multiMessageBuilder->add($textMessageBuilder);
 
-                        if (sizeof($pieces) === 3 && is_int($pieces[1]) && is_int($pieces[2])) {
+                        if (sizeof($pieces) == 3 && is_int($pieces[1]) && is_int($pieces[2])) {
                             $packageId = $pieces[1];
                             $stickerId = $pieces[2];
 
@@ -121,10 +121,10 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                                 $multiMessageBuilder->add($textMessageBuilder);
                             }
                         }
-                    } else if (substr(strtolower($event['message']['text']), 0, 7) === 'piramid') {
+                    } else if (substr(strtolower($event['message']['text']), 0, 7) == 'piramid') {
                         // send sticker
                         $pieces = explode(" ", $event['message']['text']);
-                        if (sizeof($pieces) === 2 && is_int($pieces[1])) {
+                        if (sizeof($pieces) == 2 && is_int($pieces[1])) {
                             $Height = $pieces[1];
                             $result = '';
 
