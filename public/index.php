@@ -136,7 +136,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                                     $result .= "#";
                                 }
                                 // Spasi tengah
-                                $result .= " ";
+                                $result .= "  ";
                                 // Bagian kanan
                                 for ($k = 0; $k < $i + 1; $k++)
                                 {
