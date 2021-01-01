@@ -212,11 +212,12 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                                     }
                                     $result .= $coef;
                                 }
+                                $result = '\n';
                             }
                             $textMessageBuilder = new TextMessageBuilder($result);
                             $multiMessageBuilder->add($textMessageBuilder);
                         } 
-                    } else if (substr(strtolower($event['message']['text']), 0, 15) === 'segitiga floyd') {
+                    } else if (substr(strtolower($event['message']['text']), 0, 14) === 'segitiga floyd') {
                         $pieces = explode(" ", $event['message']['text']);
 
                         if (sizeof($pieces) == 3 && is_numeric($pieces[2])) {
