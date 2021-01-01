@@ -88,13 +88,12 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
 
                     if (strtolower($event['message']['text']) == 'help') {
                         // send text
-                        $textMessageBuilder = new TextMessageBuilder("
-                            Ketik perintah untuk mengetahui informasi lebih lanjut.
-                            List perintah:
-                                help
-                                stiker <package_id> <sticler_id>
-                                piramid make <height>
-                        ");
+                        $textMessageBuilder = new TextMessageBuilder(
+                            "List perintah:\n" . 
+                            "Help\n" .
+                            "stiker <package_id> <sticler_id>\n" .
+                            "piramid make <height>\n"
+                        );
                         $multiMessageBuilder->add($textMessageBuilder);
                     }
                     else if (strtolower($event['message']['text']) == 'stiker') {
