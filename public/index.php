@@ -163,11 +163,11 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             $result = '';
 
                             for ($i = 0; $i < $Height; $i++) {
-                                for ($j = 0; $j < $Height - 1; $j++) {
-                                    $result .= " ";
+                                for ($j = 0; $j < $Height; $j++) {
+                                    $result .= "   ";
                                 }
                                 for ($k = 0; $k < $i + 1; $k++) {
-                                    $result .= "*";
+                                    $result .= "#";
                                 }
                                 $result .= "\n";
                                 $Height--;
@@ -176,7 +176,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             for ($i = $pieces[1]; $i > 0; $i--)  
                             {  
                                 for ($j = 0; $j < $Height - 1; $j++) {
-                                    $result .= " ";
+                                    $result .= "   ";
                                 } 
                           
                                 // Print i stars  
