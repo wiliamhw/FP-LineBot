@@ -200,7 +200,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             $result = '';
 
                             for ($i = 0; $i < $Height; $i++) {
-                                for ($space = 1; $space < $Height - $i + 1; $space++) {
+                                for ($space = 1; $space < $Height - $i; $space++) {
                                     $result .= "  ";;
                                 }
                                 for ($j = 0; $j < $i + 1; $j++) {
