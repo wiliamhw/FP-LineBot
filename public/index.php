@@ -162,7 +162,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             $Height = $pieces[1] - 1;
                             $result = '';
 
-                            for ($i = 0; $i < $Height; $i++) {
+                            for ($i = 0; $i < $pieces[1]; $i++) {
                                 for ($j = 0; $j < $Height; $j++) {
                                     $result .= " ";
                                 }
