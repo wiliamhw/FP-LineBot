@@ -89,19 +89,40 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                     if (strtolower($event['message']['text']) == 'help') {
                         // send text
                         $textMessageBuilder = new TextMessageBuilder(
-                            "List perintah:\n" . 
-                            "   Help\n" .
-                            "   stiker <package_id> <sticler_id>\n" .
-                            "   piramid make <height>\n"
+                            "List perintah:\n" .
+                                "   Help\n" .
+                                "   stiker <package_id> <sticler_id>\n" .
+                                "   piramid <height>\n"
+                        );
+                        $textMessageBuilder1 = new TextMessageBuilder(
+                            "Id stiker bisa dilihat di: https://devdocs.line.me/files/sticker_list.pdf"
                         );
                         $multiMessageBuilder->add($textMessageBuilder);
-                    }
-                    else if (strtolower($event['message']['text']) == 'stiker') {
+                        $multiMessageBuilder->add($textMessageBuilder1);
+                    } else if (substr(strtolower($event['message']['text']), 0, 6) == 'stiker') {
                         // send sticker
-                        $packageId = 1;
-                        $stickerId = 2;
-                        $stickerMessageBuilder = new StickerMessageBuilder($packageId, $stickerId);
-                        $multiMessageBuilder->add($stickerMessageBuilder);
+                        $pieces = explode(" ", $event['message']['text']);
+                        if (sizeof($pieces) == 3 && is_int($pieces[1]) && is_int($pieces[2])) {
+                            $packageId = $pieces[1];
+                            $stickerId = $pieces[2];
+
+                            try {
+                                $stickerMessageBuilder = new StickerMessageBuilder($packageId, $stickerId);
+                                $multiMessageBuilder->add($stickerMessageBuilder);
+                            }
+                            catch (Exception $e) {
+                                $textMessageBuilder = new TextMessageBuilder(
+                                    "PackageID atau stickerID tidak terdefinisi."
+                                );
+                                $multiMessageBuilder->add($textMessageBuilder);
+                            }
+                        }
+                    } else {
+                        $textMessageBuilder = new TextMessageBuilder(
+                            "Penulisan perintah salah\n" .
+                                "Kirim 'Help' untuk informasi perintah.\n"
+                        );
+                        $multiMessageBuilder->add($textMessageBuilder);
                     }
 
                     // store result
