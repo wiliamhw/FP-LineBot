@@ -107,11 +107,11 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             $packageId = $pieces[1];
                             $stickerId = $pieces[2];
 
-                            try {
+                            if ($packageId < 640 && $stickerId < 5) {
                                 $stickerMessageBuilder = new StickerMessageBuilder($packageId, $stickerId);
                                 $multiMessageBuilder->add($stickerMessageBuilder);
                             }
-                            catch (Exception $e) {
+                            else {
                                 $textMessageBuilder = new TextMessageBuilder(
                                     "PackageID atau stickerID tidak terdefinisi."
                                 );
