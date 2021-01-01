@@ -86,7 +86,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                     if (strtolower($event['message']['text']) == 'perkenalan') {
                         $textMessageBuilder = new TextMessageBuilder(
                             "Bot ini dibuat untuk memenuhi final project pelatihan Line Bot.\n" .
-                            "Bot ini berfungsi untuk menapilkan stiker, menyimpan berkas, dan membuat pola bangunan yang dapat di copy-paste.\n"
+                            "Bot ini berfungsi untuk menampilkan stiker, menyimpan berkas, dan membuat pola bangunan yang dapat di copy-paste.\n"
                         );
                         $multiMessageBuilder->add($textMessageBuilder);
                     }
