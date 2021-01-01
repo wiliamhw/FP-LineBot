@@ -94,7 +94,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                     if (strtolower($event['message']['text']) == 'help' || strtolower($event['message']['text']) == 'perkenalan') {
                         // send text
                         $textMessageBuilder = new TextMessageBuilder(
-                            "List perintah:\n" .
+                            "Daftar perintah:\n" .
                                 "   * Perkenalan\n" .
                                 "   * Help\n" .
                                 "   * Stiker <sticker_id> <package_id>\n" .
@@ -212,7 +212,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                                     }
                                     $result .= $coef;
                                 }
-                                $result = '\n';
+                                $result .= "\n";
                             }
                             $textMessageBuilder = new TextMessageBuilder($result);
                             $multiMessageBuilder->add($textMessageBuilder);
@@ -230,7 +230,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                                     $result .= $number;
                                     $number++;
                                 }
-                                $result = '\n';
+                                $result .= "\n";
                             }
                             $textMessageBuilder = new TextMessageBuilder($result);
                             $multiMessageBuilder->add($textMessageBuilder);
@@ -238,7 +238,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                     } else {
                         $textMessageBuilder = new TextMessageBuilder(
                             "Penulisan perintah salah.\n" .
-                            "Kirim \"Help\" untuk informasi perintah.\n"
+                            "Kirim \"Help\" untuk melihat daftar perintah.\n"
                         );
                         $multiMessageBuilder->add($textMessageBuilder);
                     }
