@@ -90,12 +90,13 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                         // send text
                         $textMessageBuilder = new TextMessageBuilder(
                             "List perintah:\n" .
-                                "   Help\n" .
-                                "   stiker <package_id> <sticler_id>\n" .
-                                "   piramid <height>\n"
+                                " * Help\n" .
+                                " * stiker <package_id> <sticler_id>\n" .
+                                " * piramid <height>\n"
                         );
                         $textMessageBuilder1 = new TextMessageBuilder(
-                            "Id stiker bisa dilihat di: https://devdocs.line.me/files/sticker_list.pdf"
+                            "Id stiker bisa dilihat di:\n" .
+                            "https://devdocs.line.me/files/sticker_list.pdf"
                         );
                         $multiMessageBuilder->add($textMessageBuilder);
                         $multiMessageBuilder->add($textMessageBuilder1);
@@ -117,9 +118,39 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                                 $multiMessageBuilder->add($textMessageBuilder);
                             }
                         }
+                    } else if (substr(strtolower($event['message']['text']), 0, 7) == 'piramid') {
+                        // send sticker
+                        $pieces = explode(" ", $event['message']['text']);
+                        if (sizeof($pieces) == 2 && is_int($pieces[1])) {
+                            $Height = $pieces[1];
+                            $result = '';
+
+                            for ($i = 0; $i < $Height; $i++) {
+                                // Bagian kiri
+                                for ($j = 0; $j < $Height - $i - 1; $j++)
+                                {
+                                    $result .= " ";
+                                }
+                                for ($k = 0; $k < $i + 1; $k++)
+                                {
+                                    $result .= "#";
+                                }
+                                // Spasi tengah
+                                $result .= " ";
+                                // Bagian kanan
+                                for ($k = 0; $k < $i + 1; $k++)
+                                {
+                                    $result .= "#";
+                                }         
+                                $result .= "\n";
+                            }
+
+                            $textMessageBuilder = new TextMessageBuilder($result);
+                            $multiMessageBuilder->add($textMessageBuilder);
+                        }
                     } else {
                         $textMessageBuilder = new TextMessageBuilder(
-                            "Penulisan perintah salah\n" .
+                            "Penulisan perintah salah.\n" .
                                 "Kirim 'Help' untuk informasi perintah.\n"
                         );
                         $multiMessageBuilder->add($textMessageBuilder);
