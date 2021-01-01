@@ -107,6 +107,9 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             $packageId = $pieces[1];
                             $stickerId = $pieces[2];
 
+                            $textMessageBuilder = new TextMessageBuilder(substr(strtolower($event['message']['text']), 0, 6));
+                            $multiMessageBuilder->add($textMessageBuilder);
+
                             try {
                                 $stickerMessageBuilder = new StickerMessageBuilder($packageId, $stickerId);
                                 $multiMessageBuilder->add($stickerMessageBuilder);
@@ -144,7 +147,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                                 }         
                                 $result .= "\n";
                             }
-
+                            echo ($result);
                             $textMessageBuilder = new TextMessageBuilder($result);
                             $multiMessageBuilder->add($textMessageBuilder);
                         }
