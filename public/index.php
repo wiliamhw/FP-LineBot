@@ -102,7 +102,8 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                                 "   * Help\n" .
                                 "   * stiker <package_id> <sticler_id>\n" .
                                 "   * piramid <tinggi>\n" .
-                                "   * berlian <tinggi>\n"
+                                "   * berlian <tinggi>\n" .
+                            "Untuk menyimpan berkas, kirim berkas tersebut ke bot init.\n"
                         );
                         $textMessageBuilder1 = new TextMessageBuilder(
                             "Id stiker bisa dilihat di:\n" .
@@ -163,7 +164,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
 
                             for ($i = 0; $i < $Height; $i++) {
                                 for ($j = 0; $j < $Height; $j++) {
-                                    $result .= "  ";
+                                    $result .= " ";
                                 }
                                 for ($k = 0; $k < $i + 1; $k++) {
                                     $result .= "*";
@@ -175,7 +176,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             for ($i = $pieces[1]; $i > 0; $i--)  
                             {  
                                 for ($j = 0; $j < $Height; $j++) {
-                                    $result .= "  ";
+                                    $result .= " ";
                                 } 
                           
                                 // Print i stars  
