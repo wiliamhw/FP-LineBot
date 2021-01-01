@@ -90,9 +90,9 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                         // send text
                         $textMessageBuilder = new TextMessageBuilder(
                             "List perintah:\n" . 
-                            "Help\n" .
-                            "stiker <package_id> <sticler_id>\n" .
-                            "piramid make <height>\n"
+                            "   Help\n" .
+                            "   stiker <package_id> <sticler_id>\n" .
+                            "   piramid make <height>\n"
                         );
                         $multiMessageBuilder->add($textMessageBuilder);
                     }
