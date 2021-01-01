@@ -123,7 +123,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                         $pieces = explode(" ", $event['message']['text']);
                         if (sizeof($pieces) == 2 && is_numeric($pieces[1])) {
                             $Height = $pieces[1];
-                            $result = '';
+                            $result = ' ';
 
                             for ($i = 0; $i < $Height; $i++) {
                                 // Bagian kiri
