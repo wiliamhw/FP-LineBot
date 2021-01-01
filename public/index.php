@@ -11,9 +11,6 @@ use \LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use \LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
 use \LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use \LINE\LINEBot\MessageBuilder\StickerMessageBuilder;
-use \LINE\LINEBot\MessageBuilder\ImageMessageBuilder;
-use \LINE\LINEBot\MessageBuilder\VideoMessageBuilder;
-use \LINE\LINEBot\MessageBuilder\AudioMessageBuilder;
 use \LINE\LINEBot\SignatureValidator as SignatureValidator;
 
 // If request simulation --> true
@@ -100,9 +97,11 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             "List perintah:\n" .
                                 "   * Perkenalan\n" .
                                 "   * Help\n" .
-                                "   * stiker <package_id> <sticler_id>\n" .
-                                "   * piramid <tinggi>\n" .
-                                "   * berlian <tinggi>\n" .
+                                "   * Stiker <sticker_id> <package_id>\n" .
+                                "   * Piramid <tinggi>\n" .
+                                "   * Wajik <tinggi>\n" .
+                                "   * Segitiga Pascal <tinggi>\n" .
+                                "   * Segitiga Floyd <tinggi>\n" .
                             "Untuk menyimpan berkas, kirim berkas tersebut ke bot init.\n"
                         );
                         $textMessageBuilder1 = new TextMessageBuilder(
@@ -116,10 +115,13 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                         $pieces = explode(" ", $event['message']['text']);
 
                         if (sizeof($pieces) == 3 && is_numeric($pieces[1]) && is_numeric($pieces[2])) {
-                            $packageId = $pieces[1];
-                            $stickerId = $pieces[2];
+                            $stickerId = $pieces[1];
+                            $packageId = $pieces[2];
 
-                            if ($packageId < 640 && $stickerId < 5) {
+                            if ($packageId == 1 && $stickerId <= 430 ||
+                                $packageId == 2 && $stickerId <= 527 ||
+                                $packageId == 3 && $stickerId <= 259 ||
+                                $packageId == 4 && $stickerId <= 632) {
                                 $stickerMessageBuilder = new StickerMessageBuilder($packageId, $stickerId);
                                 $multiMessageBuilder->add($stickerMessageBuilder);
                             } else {
@@ -155,7 +157,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                             $textMessageBuilder = new TextMessageBuilder($result);
                             $multiMessageBuilder->add($textMessageBuilder);
                         }
-                    } else if (substr(strtolower($event['message']['text']), 0, 7) === 'berlian') {
+                    } else if (substr(strtolower($event['message']['text']), 0, 5) === 'wajik') {
                         $pieces = explode(" ", $event['message']['text']);
 
                         if (sizeof($pieces) == 2 && is_numeric($pieces[1])) {
@@ -186,7 +188,49 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                                 $result .= "\n";
                                 $Height++;
                             }  
+                            $textMessageBuilder = new TextMessageBuilder($result);
+                            $multiMessageBuilder->add($textMessageBuilder);
+                        } 
+                    } else if (substr(strtolower($event['message']['text']), 0, 15) === 'Segitiga Pascal') {
+                        $pieces = explode(" ", $event['message']['text']);
 
+                        if (sizeof($pieces) == 3 && is_numeric($pieces[2])) {
+                            $coef = 1;
+                            $Height = $pieces[2];
+                            $result = '';
+
+                            for ($i = 0; $i < $pieces[2]; $i++) {
+                                for ($space = 1; $space < $Height - $i + 1; $space++) {
+                                    $result .= "  ";;
+                                }
+                                for ($j = 0; $j < $i + 1; $j++) {
+                                    if ($j == 0 || $i == 0) {
+                                        $coef = 1;
+                                    }
+                                    else {
+                                        $coef = $coef * ($i - $j + 1) / $j;
+                                    }
+                                    $result .= $coef;
+                                }
+                            }
+                            $textMessageBuilder = new TextMessageBuilder($result);
+                            $multiMessageBuilder->add($textMessageBuilder);
+                        } 
+                    } else if (substr(strtolower($event['message']['text']), 0, 15) === 'Segitiga Floyd') {
+                        $pieces = explode(" ", $event['message']['text']);
+
+                        if (sizeof($pieces) == 3 && is_numeric($pieces[2])) {
+                            $Height = $pieces[2];
+                            $number = 1;
+                            $result = '';
+
+                            for ($i = 1; $i < $Height + 1; $i++) {
+                                for ($j = 1; $j < $i + 1; $j++) {
+                                    $result .= $number;
+                                    $number++;
+                                }
+                                $result = '\n';
+                            }
                             $textMessageBuilder = new TextMessageBuilder($result);
                             $multiMessageBuilder->add($textMessageBuilder);
                         } 
