@@ -103,10 +103,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                     } else if (substr(strtolower($event['message']['text']), 0, 6) == 'stiker') {
                         // send sticker
                         $pieces = explode(" ", $event['message']['text']);
-                        $textMessageBuilder = new TextMessageBuilder(is_numeric($pieces[1]));
-                        $multiMessageBuilder->add($textMessageBuilder);
-
-                        if (sizeof($pieces) == 3 && is_int($pieces[1]) && is_numeric($pieces[2])) {
+                        if (sizeof($pieces) == 3 && is_numeric($pieces[1]) && is_numeric($pieces[2])) {
                             $packageId = $pieces[1];
                             $stickerId = $pieces[2];
 
@@ -124,7 +121,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                     } else if (substr(strtolower($event['message']['text']), 0, 7) == 'piramid') {
                         // send sticker
                         $pieces = explode(" ", $event['message']['text']);
-                        if (sizeof($pieces) == 2 && is_int($pieces[1])) {
+                        if (sizeof($pieces) == 2 && is_numeric($pieces[1])) {
                             $Height = $pieces[1];
                             $result = '';
 
