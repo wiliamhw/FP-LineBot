@@ -71,7 +71,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                     $event['message']['type'] == 'audio' or
                     $event['message']['type'] == 'file'
                 ) {
-                    $contentURL = " https://linebotphp85.herokuapp.com/public/content/" . $event['message']['id'];
+                    $contentURL = " https://line-final-project.herokuapp.com/public/content/" . $event['message']['id'];
                     $contentType = ucfirst($event['message']['type']);
                     $result = $bot->replyText(
                         $event['replyToken'],
@@ -81,83 +81,32 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                     return $response
                         ->withHeader('Content-Type', 'application/json')
                         ->withStatus($result->getHTTPStatus());
-                }
-                //group room
-                elseif (
-                    $event['source']['type'] == 'group' or
-                    $event['source']['type'] == 'room'
-                ) {
-                    //message from group / room
-                    if ($event['source']['userId']) {
-
-                        $userId = $event['source']['userId'];
-                        $getprofile = $bot->getProfile($userId);
-                        $profile = $getprofile->getJSONDecodedBody();
-                        $greetings = new TextMessageBuilder("Halo, " . $profile['displayName']);
-
-                        $result = $bot->replyMessage($event['replyToken'], $greetings);
-                        $response->getBody()->write(json_encode($result->getJSONDecodedBody()));
-                        return $response
-                            ->withHeader('Content-Type', 'application/json')
-                            ->withStatus($result->getHTTPStatus());
-                    }
                 } else {
-                    //message from single user
-                    // send same message as reply to user
-                    // $result = $bot->replyText($event['replyToken'], $event['message']['text']);
-                    // or we can use replyMessage() instead to send reply message
-                    // make text
-                    $textMessageBuilder = new TextMessageBuilder($event['message']['text']);
-                    // $result = $bot->replyMessage($event['replyToken'], $textMessageBuilder);
 
                     // make multiMessage
                     $multiMessageBuilder = new multiMessageBuilder();
-                    $multiMessageBuilder->add($textMessageBuilder);
 
-                    if (strtolower($event['message']['text']) == 'stiker') {
+                    if (strtolower($event['message']['text']) == 'help') {
+                        // send text
+                        $textMessageBuilder = new TextMessageBuilder("
+                            Ketik perintah untuk mengetahui informasi lebih lanjut.
+                            List perintah:
+                                help
+                                stiker <package_id> <sticler_id>
+                                piramid make <height>
+                        ");
+                        $multiMessageBuilder->add($textMessageBuilder);
+                    }
+                    else if (strtolower($event['message']['text']) == 'stiker') {
                         // send sticker
                         $packageId = 1;
                         $stickerId = 2;
                         $stickerMessageBuilder = new StickerMessageBuilder($packageId, $stickerId);
                         $multiMessageBuilder->add($stickerMessageBuilder);
-                    } else if (strtolower($event['message']['text']) == 'gambar') {
-                        // send image
-                        $imageMessageBuilder = new ImageMessageBuilder('https://i.imgur.com/kBzhWuh.jpg', 'https://i.imgur.com/kBzhWuh.jpg');
-                        $multiMessageBuilder->add($imageMessageBuilder);
-                    } else if (strtolower($event['message']['text']) == 'youtube') {
-                        // send text
-                        $textMessageBuilder2 = new TextMessageBuilder("https://youtu.be/bpKoG_LLBaM");
-                        $multiMessageBuilder->add($textMessageBuilder2);
-                    } else if (strtolower($event['message']['text']) == 'video') {
-                        // send video
-                        $videoMessageBuilder  = new VideoMessageBuilder('https://i.imgur.com/OMdvzJ9.mp4', 'https://i.imgur.com/yUqrm2M.jpg');
-                        $multiMessageBuilder->add($videoMessageBuilder);
-                    } else if (strtolower($event['message']['text']) == 'user name') {
-                        // send user name
-                        $userId = $event['source']['userId'];
-                        $getprofile = $bot->getProfile($userId);
-                        $profile = $getprofile->getJSONDecodedBody();
-                        $textMessageBuilder3 = new TextMessageBuilder(("Halo, " . $profile['displayName']));
-                        $multiMessageBuilder->add($textMessageBuilder3);
-                    } else if (strtolower($event['message']['text']) == 'flex message') {
- 
-                        $flexTemplate = file_get_contents("../flex_message.json"); // template flex message
-                        $result = $httpClient->post(LINEBot::DEFAULT_ENDPOINT_BASE . '/v2/bot/message/reply', [
-                            'replyToken' => $event['replyToken'],
-                            'messages'   => [
-                                [
-                                    'type'     => 'flex',
-                                    'altText'  => 'Test Flex Message',
-                                    'contents' => json_decode($flexTemplate)
-                                ]
-                            ],
-                        ]);
                     }
 
                     // store result
-                    if (strtolower($event['message']['text']) != 'flex message') {
-                        $result = $bot->replyMessage($event['replyToken'], $multiMessageBuilder);
-                    }
+                    $result = $bot->replyMessage($event['replyToken'], $multiMessageBuilder);
 
                     // write to JSON
                     $response->getBody()->write(json_encode($result->getJSONDecodedBody()));
@@ -169,72 +118,6 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
         }
         return $response->withStatus(200, 'for Webhook!'); //buat ngasih response 200 ke pas verify webhook
     }
-    return $response->withStatus(400, 'No event sent!');
-});
-
-// buat push message
-$app->get('/pushmessage', function ($req, $response) use ($bot) {
-    // send push message to a user
-    $userId = 'U03f2e64bdbc12c90ed48141c3a51ee39';
-    $textMessageBuilder = new TextMessageBuilder('Halo, ini pesan push');
-    $result = $bot->pushMessage($userId, $textMessageBuilder);
-
-    // sticker example
-    // $stickerMessageBuilder = new StickerMessageBuilder(1, 106);
-    // $result = &bot->pushMessage($userId, $stickerMessageBuilder);
-
-    $response->getBody()->write("Pesan push berhasil dikirim!");
-    return $response
-        ->withHeader('Content-Type', 'application/json')
-        ->withStatus($result->getHTTPStatus());
-});
-
-$app->get('/multicast', function ($req, $response) use ($bot) {
-    $userList = ['U03f2e64bdbc12c90ed48141c3a51ee39'];
-
-    // list of users
-    // $userList = [
-    //     'U206d25c2ea6bd87c17655609xxxxxxxx',
-    //     'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-    //     'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-    //     'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-    //     'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'];
-
-    // send multicast message to user
-    $textMessageBuilder = new TextMessageBuilder('Halo, ini pesan multicast');
-    $result = $bot->multicast($userList, $textMessageBuilder);
-
-
-    $response->getBody()->write("Pesan multicast berhasil dikirim");
-    return $response
-        ->withHeader('Content-Type', 'application/json')
-        ->withStatus($result->getHTTPStatus());
-});
-
-$app->get('/profile', function ($req, $response) use ($bot) // statis
-// $app->get('/profile/{userId}', function ($req, $response, $args) use ($bot) // dinamis
-{
-    // get user profile
-    $userId = 'U03f2e64bdbc12c90ed48141c3a51ee39'; // statis
-    // $userId = $args['userId']; // dinamis
-    $result = $bot->getProfile($userId);
-
-    $response->getBody()->write(json_encode($result->getJSONDecodedBody()));
-    return $response
-        ->withHeader('Content-Type', 'application/json')
-        ->withStatus($result->getHTTPStatus());
-});
-
-// get berkas
-$app->get('/content/{messageId}', function ($req, $response, $args) use ($bot) {
-    // get message content
-    $messageId = $args['messageId'];
-    $result = $bot->getMessageContent($messageId);
-    // set response
-    $response->getBody()->write($result->getRawBody());
-    return $response
-        ->withHeader('Content-Type', $result->getHeader('Content-Type'))
-        ->withStatus($result->getHTTPStatus());
 });
 
 $app->run();
