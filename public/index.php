@@ -1,6 +1,7 @@
 $httpClient
 <?php
 require __DIR__ . '/../vendor/autoload.php';
+require '../config.php';
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -17,9 +18,8 @@ use \LINE\LINEBot\SignatureValidator as SignatureValidator;
 // else set to false
 $pass_signature = true;
 
-// set LINE channel_access_token and channel_secret
-$channel_access_token = "O61KVxDNK8SFhtjMZ7vjWoatFexye3BL3D6ryMTIstidU2u+DHFg1OTefzlLOpgXGbFbX7kVcWi0REkepR5xX9+m0ZQPP4WtF9d2CPiIq1c4N7AfMtCFFTgZEoGNgPGxuLuEXVv7FamvQ7PprsZfDQdB04t89/1O/w1cDnyilFU=";
-$channel_secret = "3511922bd165643e115dc07412a17040";
+// get data from config file
+$this->_contentURL = $_contentURL;
 
 // inisiasi objek bot
 $httpClient = new CurlHTTPClient($channel_access_token);
@@ -68,7 +68,7 @@ $app->post('/webhook', function (Request $request, Response $response) use ($cha
                     $event['message']['type'] == 'audio' or
                     $event['message']['type'] == 'file'
                 ) {
-                    $contentURL = " https://line-final-project.herokuapp.com/public/content/" . $event['message']['id'];
+                    $contentURL = $this->_contentURL . $event['message']['id'];
                     $contentType = ucfirst($event['message']['type']);
                     $result = $bot->replyText(
                         $event['replyToken'],
